@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hak Memilih Sederhana</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 600px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hak Memilih</h1>
+    <table id="infoTable">
+        <thead>
+            <tr>
+                <th>Nama Lengkap</th>
+                <th>Umur</th>
+                <th>Status Nikah</th>
+                <th>Hak Memilih</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data akan diisi oleh JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        // Fungsi untuk mengumpulkan data melalui prompt
+        function collectData() {
+            // Prompt pertama: Berapa orang yang akan di-data-kan
+            let jumlahOrang = prompt("Berapa orang yang akan di-data-kan?");
+            jumlahOrang = parseInt(jumlahOrang);
+            if (isNaN(jumlahOrang) || jumlahOrang <= 0) {
+                alert("Jumlah orang harus berupa angka positif!");
+                return;
+            }
+
+            // Array untuk menyimpan data semua orang
+            let dataOrang = [];
+
+            // Loop untuk setiap orang
+            for (let i = 1; i <= jumlahOrang; i++) {
+                alert(`Data untuk orang ke-${i}:`);
+
+                // Prompt untuk nama lengkap
+                let nama = prompt("Masukkan nama lengkap:");
+                if (!nama) {
+                    alert("Nama lengkap diperlukan!");
+                    i--; // Ulangi untuk orang ini
+                    continue;
+                }
+
+                // Prompt untuk umur
+                let umur = prompt("Masukkan umur:");
+                umur = parseInt(umur);
+                if (isNaN(umur) || umur <= 0) {
+                    alert("Umur harus berupa angka positif!");
+                    i--; // Ulangi untuk orang ini
+                    continue;
+                }
+
+                // Prompt untuk status pernikahan (OK = sudah menikah, Cancel = belum)
+                let sudahMenikah = confirm("Apakah sudah menikah? Klik OK untuk sudah, Cancel untuk belum.");
+                let statusPernikahan = sudahMenikah ? "Sudah" : "Belum";
+
+                // Hitung hak memilih: minimal umur 15 dan sudah menikah
+                let hakMemilih = (umur >= 15 && sudahMenikah) ? "Ya" : "Tidak";
+
+                // Simpan data ke array
+                dataOrang.push({ nama, umur, statusPernikahan, hakMemilih });
+            }
+
+            // Tampilkan semua data dalam tabel
+            displayData(dataOrang);
+        }
+
+        // Fungsi untuk menampilkan data dalam tabel
+        function displayData(dataOrang) {
+            const tbody = document.querySelector("#infoTable tbody");
+            tbody.innerHTML = ""; // Kosongkan tabel sebelumnya
+
+            dataOrang.forEach(person => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${person.nama}</td>
+                    <td>${person.umur}</td>
+                    <td>${person.statusPernikahan}</td>
+                    <td>${person.hakMemilih}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Jalankan fungsi saat halaman dimuat
+        window.onload = collectData;
+    </script>
+</body>
+</html>
